@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\VertionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VertionRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['vertion.read']],
+    denormalizationContext: ['groups' => ['vertion.write']]
+)]
 class Vertion
 {
     #[ORM\Id]
@@ -17,22 +20,28 @@ class Vertion
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['vertion.read', 'vertion.write'])]
     private ?string $title = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['vertion.read', 'vertion.write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups(['vertion.read', 'vertion.write'])]
     private ?array $bugs = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups(['vertion.read', 'vertion.write'])]
     private ?array $features = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups(['vertion.read', 'vertion.write'])]
     private ?array $notes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $Date = null;
+    #[Groups(['vertion.read', 'vertion.write'])]
+    private ?\DateTimeInterface $date = null;
 
     public function getId(): ?int
     {
@@ -101,12 +110,12 @@ class Vertion
 
     public function getDate(): ?\DateTimeInterface
     {
-        return $this->Date;
+        return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $Date): static
+    public function setDate(?\DateTimeInterface $date): static
     {
-        $this->Date = $Date;
+        $this->date = $date;
 
         return $this;
     }
