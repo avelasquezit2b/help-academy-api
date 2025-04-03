@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\VertionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -60,9 +61,9 @@ class Vertion
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?string
     {
-        return $this->createdAt;
+        return $this->createdAt ? $this->createdAt->format('Y/m/d') : null;  // Cambié el formato aquí
     }
 
     public function setCreatedAt(?\DateTimeImmutable $createdAt): static
@@ -108,9 +109,9 @@ class Vertion
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?string
     {
-        return $this->date;
+        return $this->date ? $this->date->format('Y/m/d') : null;  // Formateado también aquí
     }
 
     public function setDate(?\DateTimeInterface $date): static
