@@ -2,10 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RoadmapItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoadmapItemRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['RoadmapItem.read']],
+    denormalizationContext: ['groups' => ['RoadmapItem.write']]
+)]
 class RoadmapItem
 {
     #[ORM\Id]
@@ -14,15 +19,19 @@ class RoadmapItem
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 25)]
+    #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
     private ?string $quarter = null;
 
     #[ORM\Column]
+    #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
     private ?int $year = null;
 
     public function getId(): ?int
