@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\RoadmapItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     normalizationContext: ['groups' => ['RoadmapItem.read']],
     denormalizationContext: ['groups' => ['RoadmapItem.write']]
+)]
+
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'year' => 'exact'
+    ]
 )]
 class RoadmapItem
 {
@@ -34,6 +44,10 @@ class RoadmapItem
     #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
     private ?int $year = null;
 
+    #[ORM\Column(type: "datetime", nullable: true)]
+    #[Groups(['RoadmapItem.read', 'RoadmapItem.write'])]
+    private ?\DateTimeInterface $date = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +61,18 @@ class RoadmapItem
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): static
+    {
+        $this->date = $date;
 
         return $this;
     }
